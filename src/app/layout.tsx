@@ -15,7 +15,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Kiglance Challenge",
+  title: "Kiglance Challenge - Steve Ndicunguye",
   description: "This is a challenge by Kiglance",
 };
 
