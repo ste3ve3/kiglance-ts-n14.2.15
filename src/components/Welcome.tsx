@@ -3,7 +3,7 @@
 import { useContext } from "react";
 import images from "@/utils/images";
 import Button from "./Button";
-import { ModalContext } from "@/app/page";
+import { ModalContext } from "./ModalContext";
 
 const Welcome = () => {
   const { handleSteps, handleClose } = useContext(ModalContext);

@@ -2,7 +2,7 @@
 
 import { useContext } from "react";
 import images from "@/utils/images";
-import { ModalContext } from "@/app/page";
+import { ModalContext } from "./ModalContext";
 
 const Success = () => {
   const { handleClose } = useContext(ModalContext);

@@ -1,20 +1,12 @@
-'use client';
+"use client";
 
-import React, { createContext } from "react";
+import React from "react";
 import Button from "@/components/Button";
 import ToggleModal from "@/components/ToggleModal";
 import Welcome from "@/components/Welcome";
 import Success from "@/components/Success";
 import Steps from "@/components/Steps";
-
-type ModalContextType = {
-  handleClose: () => void;
-  handleSteps: (value: React.SetStateAction<string>) => void;
-};
-
-export const ModalContext = createContext<ModalContextType>(
-  {} as ModalContextType
-);
+import { ModalContext } from "@/components/ModalContext";
 
 const Home = () => {
   const [modelOpen, setModelOpen] = React.useState(false);

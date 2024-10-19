@@ -3,7 +3,7 @@
 import { Box, Step, StepLabel, Stepper, styled } from "@mui/material";
 import React, { createContext, useContext, useState } from "react";
 import images from "@/utils/images";
-import { ModalContext } from "@/app/page";
+import { ModalContext } from "./ModalContext";
 
 const StepLine = styled(Box, {
   shouldForwardProp: (prop) => prop !== "isActive" && prop !== "isCompleted",
