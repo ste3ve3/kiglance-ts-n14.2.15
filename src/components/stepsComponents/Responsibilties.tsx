@@ -1,25 +1,31 @@
-'use client';
+"use client";
 
 import { Box } from "@mui/material";
 import Button from "../Button";
 import ValueBox from "../ValueBox";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { StepperContext } from "../Stepper";
+import { fetchResponsibilities } from "@/api";
 
-const responsibilities = [
-  "Marketing",
-  "IT",
-  "Customer Services",
-  "Finance",
-  "Sales",
-  "Owner/CEO",
-  "Design",
-  "Education/Student",
-  "Product",
-];
+type Responsibility = {
+  id: string;
+  name: string;
+};
 
 const Responsibilties = () => {
   const { handleBack, handleNext } = useContext(StepperContext);
+  const [responsibilities, setResponsibilities] = useState<Responsibility[]>(
+    []
+  );
+
+  useEffect(() => {
+    const getResponsibilities = async () => {
+      const data = await fetchResponsibilities();
+      setResponsibilities(data);
+    };
+    getResponsibilities();
+  }, []);
+
   return (
     <div className="w-full h-full flex flex-col place-content-between items-center">
       <div className="w-2/3 h-[80%] flex flex-col items-center overflow-y-auto">
@@ -28,7 +34,7 @@ const Responsibilties = () => {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full mt-3">
           {responsibilities.map((responsibility) => (
-            <ValueBox key={responsibility} text={responsibility} />
+            <ValueBox key={responsibility?.id} text={responsibility?.name} />
           ))}
         </div>
       </div>

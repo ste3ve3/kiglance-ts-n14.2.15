@@ -1,50 +1,28 @@
-'use client';
+"use client";
 
 import { Box } from "@mui/material";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import Button from "../Button";
 import { StepperContext } from "../Stepper";
+import { fetchProductTags } from "@/api";
 
-const productInterests = [
-  "Label",
-  "SEO",
-  "Sales enablement",
-  "Email Marketing",
-  "Max ch",
-  "Cross-Channel",
-  "Max using 10 Tags",
-  "Label",
-  "SEO",
-  "Sales enablement",
-  "Email Marketing",
-  "Max ch",
-  "Cross-Channel",
-  "Max using 10 Tags",
-  "Label",
-  "SEO",
-  "Sales enablement",
-  "Email Marketing",
-  "Max ch",
-  "Cross-Channel",
-  "Max using 10 Tags",
-  "Label",
-  "SEO",
-  "Sales enablement",
-  "Email Marketing",
-  "Max ch",
-  "Cross-Channel",
-  "Max using 10 Tags",
-  "Label",
-  "SEO",
-  "Sales enablement",
-  "Email Marketing",
-  "Max ch",
-  "Cross-Channel",
-  "Max using 10 Tags",
-];
+type ProductTag = {
+  id: string;
+  name: string;
+};
 
 const ProductInterests = () => {
   const { handleBack, handleNext } = useContext(StepperContext);
+  const [productInterests, setProductInterests] = useState<ProductTag[]>([]);
+
+  useEffect(() => {
+    const getProductTags = async () => {
+      const data = await fetchProductTags();
+      setProductInterests(data);
+    };
+    getProductTags();
+  }, []);
+
   return (
     <div className="w-full h-full flex flex-col place-content-between items-center">
       <div className="w-4/5 h-[80%] flex flex-col justify-start items-center overflow-y-auto scrollbar-hidden">
@@ -62,7 +40,7 @@ const ProductInterests = () => {
                   : "border border-light-gray"
               } rounded-full flex items-center justify-center`}
             >
-              {interest}
+              {interest?.name}
             </div>
           ))}
         </div>

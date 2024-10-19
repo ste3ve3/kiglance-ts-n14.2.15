@@ -1,60 +1,33 @@
-'use client';
+"use client";
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import images from "@/utils/images";
 import { StepperContext } from "../Stepper";
 import { Box } from "@mui/material";
 import Button from "../Button";
 import Image from "next/image";
+import { fetchProducts } from "@/api/fetchProducts";
 
-type IProduct = {
+type Product = {
+  id: string;
   image: string;
   name: string;
 };
 
-const products: Array<IProduct> = [
-  {
-    image: images.imageOne,
-    name: "Google Analytics",
-  },
-  {
-    image: images.avatar,
-    name: "Google",
-  },
-  {
-    image: images.imageOne,
-    name: "Google Analytics",
-  },
-  {
-    image: images.avatar,
-    name: "Google",
-  },
-  {
-    image: images.imageOne,
-    name: "Google Analytics",
-  },
-  {
-    image: images.avatar,
-    name: "Google",
-  },
-  {
-    image: images.imageOne,
-    name: "Google Analytics",
-  },
-  {
-    image: images.avatar,
-    name: "Google",
-  },
-];
-
 const Products = () => {
-  const [searchValue, setSearchValue] = React.useState("");
-  const [selectedProducts, setSelectedProducts] = React.useState<
-    Array<IProduct>
-  >([]);
-  const [searchedProducts, setSearchedProducts] = React.useState<
-    Array<IProduct>
-  >([]);
+  const [searchValue, setSearchValue] = useState("");
+  const [selectedProducts, setSelectedProducts] = useState<Array<Product>>([]);
+  const [searchedProducts, setSearchedProducts] = useState<Array<Product>>([]);
+  const [products, setProducts] = useState<Array<Product>>([]);
+
+  useEffect(() => {
+    const getProducts = async () => {
+      const data = await fetchProducts();
+      setProducts(data);
+      setSearchedProducts(data);
+    };
+    getProducts();
+  }, []);
 
   const handleRemove = (index: number) => {
     const filter = selectedProducts.filter((_, i) => i !== index);
@@ -71,11 +44,11 @@ const Products = () => {
     setSearchedProducts(filter);
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (searchValue) {
       searchProducts(searchValue);
     } else setSearchedProducts(products);
-  }, [searchValue]);
+  }, [searchValue, products]);
 
   const { handleBack, handleNext } = useContext(StepperContext);
 
@@ -125,7 +98,9 @@ const Products = () => {
                   <Image
                     src={product.image}
                     alt={product.name}
-                    className="w-8 h-8"
+                    width={20}
+                    height={20}
+                    className="rounded"
                   />
                   <span className="text-sm">{product.name}</span>
                   <Image
@@ -138,20 +113,21 @@ const Products = () => {
               ))}
             </div>
           )}
-          {/* products display */}
           <div className="w-full my-4">
             <p>Products</p>
             <div>
               {searchedProducts.map((product, index) => (
                 <div
                   key={index}
-                  className="flex items-center justify-between my-2"
+                  className="flex items-center justify-between my-4 pr-5"
                 >
                   <div className="flex items-center justify-start gap-4">
                     <Image
                       src={product.image}
                       alt={product.name}
-                      className="w-10 h-10 object-cover"
+                      width={30}
+                      height={30}
+                      className="object-cover rounded"
                     />
                     <span>{product.name}</span>
                   </div>
