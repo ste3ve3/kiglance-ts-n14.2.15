@@ -22,7 +22,6 @@ const ProfilePhoto = () => {
   const [selectedColor, setSelectedColor] = React.useState("#8D57FA");
   const [fileUrl, setFileUrl] = React.useState("");
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
     if (file) {
@@ -37,7 +36,6 @@ const ProfilePhoto = () => {
     <div className="w-full h-full flex flex-col place-content-between items-center">
       <div className="w-11/12 h-[80%] flex flex-col items-center overflow-y-auto">
         <h2 className="text-xl font-semibold">Choose your profile photo</h2>
-        {/* before chosing a photo */}
         {!fileUrl ? (
           <>
             <div className="my-5">
@@ -106,6 +104,8 @@ const ProfilePhoto = () => {
               <Image
                 src={fileUrl}
                 alt="file"
+                width={48}
+                height={48}
                 className="w-48 h-48 object-cover object-center"
               />
             </div>
