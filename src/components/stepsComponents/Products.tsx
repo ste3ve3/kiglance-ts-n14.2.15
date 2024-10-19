@@ -5,6 +5,8 @@ import images from "@/utils/images";
 import { StepperContext } from "../Stepper";
 import { Box } from "@mui/material";
 import Button from "../Button";
+import Image from "next/image";
+
 type IProduct = {
   image: string;
   name: string;
@@ -120,13 +122,13 @@ const Products = () => {
                   key={index}
                   className="p-2 flex justify-center items-center gap-2 border border-gray-300 rounded-lg bg-gray-50"
                 >
-                  <img
+                  <Image
                     src={product.image}
                     alt={product.name}
                     className="w-8 h-8"
                   />
                   <span className="text-sm">{product.name}</span>
-                  <img
+                  <Image
                     src={images.closeIcon}
                     alt="close"
                     onClick={() => handleRemove(index)}
@@ -146,14 +148,14 @@ const Products = () => {
                   className="flex items-center justify-between my-2"
                 >
                   <div className="flex items-center justify-start gap-4">
-                    <img
+                    <Image
                       src={product.image}
                       alt={product.name}
                       className="w-10 h-10 object-cover"
                     />
                     <span>{product.name}</span>
                   </div>
-                  <img
+                  <Image
                     src={images.addCircle}
                     alt="add circle"
                     onClick={() =>

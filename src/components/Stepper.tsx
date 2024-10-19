@@ -4,6 +4,7 @@ import { Box, Step, StepLabel, Stepper, styled } from "@mui/material";
 import React, { createContext, useContext, useState } from "react";
 import images from "@/utils/images";
 import { ModalContext } from "./ModalContext";
+import Image from "next/image";
 
 const StepLine = styled(Box, {
   shouldForwardProp: (prop) => prop !== "isActive" && prop !== "isCompleted",
@@ -55,8 +56,8 @@ const ReusableStepper: React.FC<ReusableStepperProps> = ({ steps }) => {
       }}
     >
       <div className="w-full pt-2 px-4 flex items-center justify-between">
-        <img src={images.navIcon} alt="app icon" />
-        <img
+        <Image src={images.navIcon} alt="app icon" />
+        <Image
           src={images.closeIcon}
           alt="close"
           onClick={handleClose}

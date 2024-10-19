@@ -1,26 +1,23 @@
 import images from "@/utils/images";
 import Button from "./Button";
+import Image from "next/image";
 
 const NavBar = () => {
   return (
     <section className="w-screen bg-dark-blue text-white fixed top-0 py-3">
       <div className="w-11/12 mx-auto flex justify-between items-center">
-        {/* nav left side */}
         <div className="flex gap-1 items-center">
-          <img src={images.navIcon} alt="navIcon" />
+          <Image src={images.navIcon} alt="navIcon" />
           <span className="font-semibold">Tech Trendin</span>
         </div>
-        {/* nav right side */}
         <div className="flex items-center gap-3">
           <ul className="gap-3 hidden md:flex">
-            {/* home link */}
             <li className="flex gap-1 items-center">
-              <img src={images.homeIcon} alt="home" />
+              <Image src={images.homeIcon} alt="home" />
               <span className="text-sm font-medium">Home</span>
             </li>
-            {/* community link */}
             <li className="flex gap-1 items-center">
-              <img src={images.communityIcon} alt="home" />
+              <Image src={images.communityIcon} alt="home" />
               <span className="text-sm font-medium text-light-gray">
                 Community
               </span>

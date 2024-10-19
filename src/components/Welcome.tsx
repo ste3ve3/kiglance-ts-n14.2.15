@@ -1,5 +1,6 @@
-'use client';
+"use client";
 
+import Image from "next/image";
 import { useContext } from "react";
 import images from "@/utils/images";
 import Button from "./Button";
@@ -10,8 +11,13 @@ const Welcome = () => {
   return (
     <div className="bg-white w-[700px] h-[600px] rounded-xl text-black">
       <div className="w-full h-[10%] py-2 px-4 border-b flex items-center justify-between">
-        <img src={images.navIcon} alt="app icon" />
-        <img src={images.closeIcon} alt="close" onClick={handleClose} className="cursor-pointer" />
+        <Image src={images.navIcon} alt="app icon" />
+        <Image
+          src={images.closeIcon}
+          alt="close"
+          onClick={handleClose}
+          className="cursor-pointer"
+        />
       </div>
       <div className="w-2/3 h-[90%] mx-auto flex flex-col items-center justify-center gap-3">
         <div className="w-32 h-32 bg-light-purple rounded-full text-white text-6xl font-bold flex items-center justify-center">
@@ -22,7 +28,7 @@ const Welcome = () => {
         <Button
           text="Let's do it"
           background="bg-light-purple"
-          handleClick={() => handleSteps('second')}
+          handleClick={() => handleSteps("second")}
           className="text-white hover:bg-light-purple/90 w-full mt-3"
         />
         <p className="text-light-gray text-xs my-5">

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { z } from "zod";
 import images from "@/utils/images";
@@ -10,6 +10,7 @@ import { Box } from "@mui/material";
 import { useContext } from "react";
 import Button from "../Button";
 import { StepperContext } from "../Stepper";
+import Image from "next/image";
 
 const communitySchema = z.object({
   headline: z
@@ -50,7 +51,7 @@ const Community = () => {
         </h2>
         <p className="my-3">Let members learn more about you.</p>
         <div className="flex items-center justify-center gap-2">
-          <img src={images.janeDoe} alt="Jane doe" />
+          <Image src={images.janeDoe} alt="Jane doe" />
           <span>Jane Doe</span>
         </div>
         <form

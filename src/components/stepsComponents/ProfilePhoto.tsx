@@ -1,10 +1,11 @@
-'use client';
+"use client";
 
 import React, { useContext } from "react";
 import images from "@/utils/images";
 import Button from "../Button";
 import { StepperContext } from "../Stepper";
 import { Box } from "@mui/material";
+import Image from "next/image";
 
 const colors = [
   "#262626",
@@ -41,7 +42,7 @@ const ProfilePhoto = () => {
           <>
             <div className="my-5">
               <div className="relative cursor-pointer border border-gray-300 rounded-lg bg-gray-50 p-2 flex items-center justify-center gap-2">
-                <img src={images.plusIcon} alt="plus icon" />
+                <Image src={images.plusIcon} alt="plus icon" />
                 <span className="text-sm">Select an image</span>
                 <input
                   type="file"
@@ -102,7 +103,7 @@ const ProfilePhoto = () => {
         ) : (
           <>
             <div className="w-full h-full bg-black/50 flex items-center justify-center">
-              <img
+              <Image
                 src={fileUrl}
                 alt="file"
                 className="w-48 h-48 object-cover object-center"
