@@ -7,8 +7,10 @@ import { Box } from "@mui/material";
 import Button from "../Button";
 import Image from "next/image";
 import { fetchProducts } from "@/api/fetchProducts";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { updateProducts } from "@/redux/features/UserExperienceSlice";
 
-type Product = {
+export type Product = {
   id: string;
   image: string;
   name: string;
@@ -19,36 +21,61 @@ const Products = () => {
   const [selectedProducts, setSelectedProducts] = useState<Array<Product>>([]);
   const [searchedProducts, setSearchedProducts] = useState<Array<Product>>([]);
   const [products, setProducts] = useState<Array<Product>>([]);
+  const [currentProducts, setCurrentProducts] = useState<Array<Product>>([]);
+  const { products: allSelectedProducts } = useAppSelector(
+    (state) => state.userExperience
+  );
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const getProducts = async () => {
       const data = await fetchProducts();
+      const selectedNames = allSelectedProducts.map((p) => p.name);
+      const filteredData = data.filter(
+        (product) => !selectedNames.includes(product.name)
+      );
+
       setProducts(data);
-      setSearchedProducts(data);
+      setSearchedProducts(filteredData);
+      setCurrentProducts(filteredData);
+      setSelectedProducts(allSelectedProducts);
     };
     getProducts();
   }, []);
 
   const handleRemove = (index: number) => {
-    const filter = selectedProducts.filter((_, i) => i !== index);
-    setSelectedProducts(filter);
+    const updatedSelected = selectedProducts.filter((_, i) => i !== index);
+    setSelectedProducts(updatedSelected);
   };
 
   function searchProducts(searchTerm: string) {
     const lowerCaseSearchTerm = searchTerm.toLowerCase();
-
-    const filter = products.filter((product) =>
+    const filter = currentProducts.filter((product) =>
       product.name.toLowerCase().includes(lowerCaseSearchTerm)
     );
-
     setSearchedProducts(filter);
   }
 
   useEffect(() => {
     if (searchValue) {
       searchProducts(searchValue);
-    } else setSearchedProducts(products);
-  }, [searchValue, products]);
+    } else {
+      setSearchedProducts(currentProducts);
+    }
+  }, [searchValue, currentProducts]);
+
+  useEffect(() => {
+    const selectedNames = selectedProducts.map((p) => p.name);
+    const filtered = products.filter(
+      (product) => !selectedNames.includes(product.name)
+    );
+    setSearchedProducts(filtered);
+    setCurrentProducts(filtered);
+  }, [selectedProducts, products]);
+
+  useEffect(() => {
+    dispatch(updateProducts(selectedProducts));
+  }, [selectedProducts, dispatch]);
 
   const { handleBack, handleNext } = useContext(StepperContext);
 
@@ -71,9 +98,9 @@ const Products = () => {
             >
               <path
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
               />
             </svg>
@@ -165,6 +192,7 @@ const Products = () => {
           text={"Next"}
           background=""
           handleClick={handleNext}
+          disabled={allSelectedProducts.length < 3}
           className="disabled:bg-light-purple/20 disabled:text-light-purple/50 bg-light-purple text-white"
         />
       </Box>

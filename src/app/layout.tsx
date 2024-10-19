@@ -1,8 +1,9 @@
+import NavBar from "@/components/NavBar";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import NavBar from "@/components/NavBar";
+import StoreProvider from "./StoreProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,10 +31,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AppRouterCacheProvider>
-          <NavBar />
-          {children}
-        </AppRouterCacheProvider>
+        <StoreProvider>
+          <AppRouterCacheProvider>
+            <NavBar />
+            {children}
+          </AppRouterCacheProvider>
+        </StoreProvider>
       </body>
     </html>
   );

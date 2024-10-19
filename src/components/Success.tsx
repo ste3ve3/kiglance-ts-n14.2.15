@@ -1,12 +1,24 @@
 'use client';
 
-import { useContext } from "react";
+import { resetState } from "@/redux/features/UserExperienceSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import images from "@/utils/images";
-import { ModalContext } from "./ModalContext";
 import Image from "next/image";
+import { useContext, useEffect } from "react";
+import { ModalContext } from "./ModalContext";
 
 const Success = () => {
   const { handleClose } = useContext(ModalContext);
+  const userExperience = useAppSelector(state => state.userExperience);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (userExperience) {
+      console.log(userExperience);
+      dispatch(resetState())
+    }
+  }, [])
+  
   return (
     <div className="bg-white w-[700px] h-max rounded-xl text-black">
       <div className="w-full h-[10%] py-2 px-4 border-b flex items-center justify-between">

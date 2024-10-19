@@ -1,13 +1,15 @@
 "use client";
 
-import { Box } from "@mui/material";
-import Button from "../Button";
-import ValueBox from "../ValueBox";
-import { useContext, useEffect, useState } from "react";
-import { StepperContext } from "../Stepper";
 import { fetchResponsibilities } from "@/api";
+import { updateResponsibility } from "@/redux/features/UserExperienceSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { Box } from "@mui/material";
+import { useContext, useEffect, useState } from "react";
+import Button from "../Button";
+import { StepperContext } from "../Stepper";
+import ValueBox from "../ValueBox";
 
-type Responsibility = {
+export type Responsibility = {
   id: string;
   name: string;
 };
@@ -17,6 +19,8 @@ const Responsibilties = () => {
   const [responsibilities, setResponsibilities] = useState<Responsibility[]>(
     []
   );
+  const { responsibility } = useAppSelector((state) => state.userExperience);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const getResponsibilities = async () => {
@@ -33,15 +37,22 @@ const Responsibilties = () => {
           What is your main work responsibility?
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full mt-3">
-          {responsibilities.map((responsibility) => (
-            <ValueBox key={responsibility?.id} text={responsibility?.name} />
+          {responsibilities.map((responsibilityItem) => (
+            <ValueBox
+              key={responsibilityItem?.name}
+              handleClick={() => {
+                dispatch(updateResponsibility(responsibilityItem));
+              }}
+              isSelected={responsibilityItem.name === responsibility?.name}
+              text={responsibilityItem?.name}
+            />
           ))}
         </div>
       </div>
       <Box
         sx={{
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent: `${responsibility ? "space-between" : "start"}`,
           alignItems: "center",
           padding: 2,
           borderTop: "1px solid #ECECF1",
@@ -54,12 +65,14 @@ const Responsibilties = () => {
           background="bg-white"
           className="text-light-purple font-medium"
         />
-        <Button
-          text={"Next"}
-          background=""
-          handleClick={handleNext}
-          className="disabled:bg-light-purple/20 disabled:text-light-purple/50 bg-light-purple text-white"
-        />
+        {responsibility && (
+          <Button
+            text={"Next"}
+            background=""
+            handleClick={handleNext}
+            className="disabled:bg-light-purple/20 disabled:text-light-purple/50 bg-light-purple text-white"
+          />
+        )}
       </Box>
     </div>
   );

@@ -1,10 +1,15 @@
-'use client';
+"use client";
 
 import { useContext } from "react";
 import ValueBox from "../ValueBox";
 import { StepperContext } from "../Stepper";
 import { Box } from "@mui/material";
 import Button from "../Button";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import {
+  updateCompanySize,
+  updateResponsibility,
+} from "@/redux/features/UserExperienceSlice";
 
 const companySize = [
   "Myself only",
@@ -20,20 +25,32 @@ const companySize = [
 
 const CompanySize = () => {
   const { handleBack, handleNext } = useContext(StepperContext);
+  const { companySize: selectedCompanySize } = useAppSelector(
+    (state) => state.userExperience
+  );
+  const dispatch = useAppDispatch();
+
   return (
     <div className="w-full h-full flex flex-col place-content-between items-center">
       <div className="w-2/3 h-[80%] flex flex-col items-center overflow-y-auto">
         <h2 className="text-xl font-semibold">What is your company size?</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full mt-3">
           {companySize.map((size) => (
-            <ValueBox key={size} text={size} />
+            <ValueBox
+              key={size}
+              isSelected={selectedCompanySize === size}
+              text={size}
+              handleClick={() => {
+                dispatch(updateCompanySize(size));
+              }}
+            />
           ))}
         </div>
       </div>
       <Box
         sx={{
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent: `${selectedCompanySize ? "space-between" : "start"}`,
           alignItems: "center",
           padding: 2,
           borderTop: "1px solid #ECECF1",
@@ -46,12 +63,14 @@ const CompanySize = () => {
           background="bg-white"
           className="text-light-purple font-medium"
         />
-        <Button
-          text={"Next"}
-          background=""
-          handleClick={handleNext}
-          className="disabled:bg-light-purple/20 disabled:text-light-purple/50 bg-light-purple text-white"
-        />
+        {selectedCompanySize && (
+          <Button
+            text={"Next"}
+            background=""
+            handleClick={handleNext}
+            className="disabled:bg-light-purple/20 disabled:text-light-purple/50 bg-light-purple text-white"
+          />
+        )}
       </Box>
     </div>
   );

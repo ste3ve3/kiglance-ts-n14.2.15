@@ -1,11 +1,16 @@
 "use client";
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import images from "@/utils/images";
 import Button from "../Button";
 import { StepperContext } from "../Stepper";
 import { Box } from "@mui/material";
 import Image from "next/image";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import {
+  updateImageColor,
+  updateImageFile,
+} from "@/redux/features/UserExperienceSlice";
 
 const colors = [
   "#262626",
@@ -21,14 +26,28 @@ const colors = [
 const ProfilePhoto = () => {
   const [selectedColor, setSelectedColor] = React.useState("#8D57FA");
   const [fileUrl, setFileUrl] = React.useState("");
+  const { imageColor, image } = useAppSelector((state) => state.userExperience);
+  const dispatch = useAppDispatch();
 
   const handleFileChange = (event: any) => {
-    const file = event.target.files[0];
+    const file: File = event.target.files[0];
     if (file) {
       const url = URL.createObjectURL(file);
       setFileUrl(url);
+      dispatch(updateImageFile(url));
+      dispatch(updateImageColor(null));
     }
   };
+
+  useEffect(() => {
+    if (image) {
+      setFileUrl(image);
+    } else {
+      if (imageColor) {
+        setSelectedColor(imageColor);
+      }
+    }
+  }, []);
 
   const { handleBack, handleNext } = useContext(StepperContext);
 
@@ -46,7 +65,7 @@ const ProfilePhoto = () => {
                   type="file"
                   id="file"
                   onChange={handleFileChange}
-                  className="absolute inset-0 w-full h-full opacity-0"
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 />
               </div>
               <p className="text-gray-400 text-xs mt-2">
@@ -70,12 +89,15 @@ const ProfilePhoto = () => {
                 {colors.map((color) => (
                   <div
                     key={color}
-                    className="relative flex items-center justify-center"
+                    className="relative flex items-center justify-center cursor-pointer"
                   >
                     <div
                       style={{ backgroundColor: color }}
                       className={`w-8 h-8 rounded-full`}
-                      onClick={() => setSelectedColor(color)}
+                      onClick={() => {
+                        setSelectedColor(color);
+                        dispatch(updateImageColor(color));
+                      }}
                     />
                     {selectedColor === color && (
                       <svg
@@ -87,9 +109,9 @@ const ProfilePhoto = () => {
                       >
                         <path
                           fill="blue"
-                          fill-rule="evenodd"
+                          fillRule="evenodd"
                           d="M0 7.5a7.5 7.5 0 1 1 15 0a7.5 7.5 0 0 1-15 0m7.072 3.21l4.318-5.398l-.78-.624l-3.682 4.601L4.32 7.116l-.64.768z"
-                          clip-rule="evenodd"
+                          clipRule="evenodd"
                         />
                       </svg>
                     )}
@@ -114,40 +136,57 @@ const ProfilePhoto = () => {
                 text="Cancel"
                 background="bg-white"
                 className="border border-light-gray w-32"
-                handleClick={() => setFileUrl("")}
+                handleClick={() => {
+                  setFileUrl("");
+                  dispatch(updateImageFile(null));
+                }}
               />
               <Button
                 text="Save"
                 background="bg-light-purple"
                 className="text-white w-32"
+                handleClick={handleNext}
               />
             </div>
           </>
         )}
       </div>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: 2,
-          borderTop: "1px solid #ECECF1",
-          width: "100%",
-        }}
-      >
-        <Button
-          handleClick={handleBack}
-          text="Back"
-          background="bg-white"
-          className="text-light-purple font-medium"
-        />
-        <Button
-          text={"Next"}
-          background=""
-          handleClick={handleNext}
-          className="disabled:bg-light-purple/20 disabled:text-light-purple/50 bg-light-purple text-white"
-        />
-      </Box>
+      {!fileUrl && (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: 2,
+            borderTop: "1px solid #ECECF1",
+            width: "100%",
+          }}
+        >
+          <Button
+            handleClick={handleBack}
+            text="Back"
+            background="bg-white"
+            className="text-light-purple font-medium"
+          />
+          <div className="flex items-center justify-center gap-2">
+            <Button
+              handleClick={() => {
+                dispatch(updateImageColor("#8D57FA"));
+                handleNext();
+              }}
+              text="Skip"
+              background="bg-white"
+              className="text-light-purple font-medium"
+            />
+            <Button
+              text={"Next"}
+              background=""
+              handleClick={handleNext}
+              className="disabled:bg-light-purple/20 disabled:text-light-purple/50 bg-light-purple text-white"
+            />
+          </div>
+        </Box>
+      )}
     </div>
   );
 };

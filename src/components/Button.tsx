@@ -1,6 +1,7 @@
 import { FC } from "react";
 
 interface Props {
+  type?: "button" | "submit" | "reset";
   text: string;
   disabled?: boolean;
   background: "bg-light-purple" | "bg-dark-gray" | string;
@@ -9,6 +10,7 @@ interface Props {
 }
 
 const Button: FC<Props> = ({
+  type,
   text,
   background,
   className,
@@ -17,6 +19,7 @@ const Button: FC<Props> = ({
 }) => {
   return (
     <button
+      type={type || "button"}
       disabled={disabled}
       onClick={handleClick}
       className={`px-4 py-2.5 rounded-lg ${background} ${className} transition duration-200`}
